@@ -1,5 +1,5 @@
 # Postgres
-DB_URL := 'postgres://postgres:rahasia@localhost:5438/prasorganic_order_service?sslmode=disable'
+DB_URL := 'postgres://postgres:rahasia@localhost:5438/zentra_order_service?sslmode=disable'
 
 # Redis cluster
 CONF_DIR=./doc/database/redis
