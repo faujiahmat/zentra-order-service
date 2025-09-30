@@ -1,0 +1,4 @@
+.env
+dummy*.*
+cmd/main
+app.log

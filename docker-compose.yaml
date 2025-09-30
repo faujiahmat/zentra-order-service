@@ -1,0 +1,178 @@
+services:
+  zentra-order-service-postgres:
+    container_name: zentra-order-service-postgres
+    image: postgres:16.0
+    ports:
+      - 5438:5432
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - type: volume
+        source: zentra-order-service-postgres-data
+        target: /var/lib/postgresql/data
+      - type: bind
+        source: ./doc/database/postgresql/postgresql.conf
+        target: /etc/postgresql/postgresql.conf
+    networks:
+      - zentra-network
+      - zentra-order-service-network
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+    restart: on-failure
+
+  zentra-order-service-redis-node-1:
+    container_name: zentra-order-service-redis-node-1
+    image: redis:7.2.2
+    ports:
+      - 9371:6379
+      - 19371:16379
+    volumes:
+      - type: bind
+        source: ./doc/database/redis/redis-node-1.conf
+        target: /usr/local/etc/redis/redis.conf
+      - type: volume
+        source: zentra-order-service-redis-data-node-1
+        target: /data
+    networks:
+      zentra-order-service-redis-network:
+        ipv4_address: 192.48.0.11
+      zentra-order-service-network:
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    restart: on-failure
+  zentra-order-service-redis-node-2:
+    container_name: zentra-order-service-redis-node-2
+    image: redis:7.2.2
+    ports:
+      - 9372:6379
+      - 19372:16379
+    volumes:
+      - type: bind
+        source: ./doc/database/redis/redis-node-2.conf
+        target: /usr/local/etc/redis/redis.conf
+      - type: volume
+        source: zentra-order-service-redis-data-node-2
+        target: /data
+    networks:
+      zentra-order-service-redis-network:
+        ipv4_address: 192.48.0.12
+      zentra-order-service-network:
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    restart: on-failure
+
+  zentra-order-service-redis-node-3:
+    container_name: zentra-order-service-redis-node-3
+    image: redis:7.2.2
+    ports:
+      - 9373:6379
+      - 19373:16379
+    volumes:
+      - type: bind
+        source: ./doc/database/redis/redis-node-3.conf
+        target: /usr/local/etc/redis/redis.conf
+      - type: volume
+        source: zentra-order-service-redis-data-node-3
+        target: /data
+    networks:
+      zentra-order-service-redis-network:
+        ipv4_address: 192.48.0.13
+      zentra-order-service-network:
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    restart: on-failure
+
+  zentra-order-service-redis-node-4:
+    container_name: zentra-order-service-redis-node-4
+    image: redis:7.2.2
+    ports:
+      - 9374:6379
+      - 19374:16379
+    volumes:
+      - type: bind
+        source: ./doc/database/redis/redis-node-4.conf
+        target: /usr/local/etc/redis/redis.conf
+      - type: volume
+        source: zentra-order-service-redis-data-node-4
+        target: /data
+    networks:
+      zentra-order-service-redis-network:
+        ipv4_address: 192.48.0.14
+      zentra-order-service-network:
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    restart: on-failure
+
+  zentra-order-service-redis-node-5:
+    container_name: zentra-order-service-redis-node-5
+    image: redis:7.2.2
+    ports:
+      - 9375:6379
+      - 19375:16379
+    volumes:
+      - type: bind
+        source: ./doc/database/redis/redis-node-5.conf
+        target: /usr/local/etc/redis/redis.conf
+      - type: volume
+        source: zentra-order-service-redis-data-node-5
+        target: /data
+    networks:
+      zentra-order-service-redis-network:
+        ipv4_address: 192.48.0.15
+      zentra-order-service-network:
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    restart: on-failure
+
+  zentra-order-service-redis-node-6:
+    container_name: zentra-order-service-redis-node-6
+    image: redis:7.2.2
+    ports:
+      - 9376:6379
+      - 19376:16379
+    volumes:
+      - type: bind
+        source: ./doc/database/redis/redis-node-6.conf
+        target: /usr/local/etc/redis/redis.conf
+      - type: volume
+        source: zentra-order-service-redis-data-node-6
+        target: /data
+    networks:
+      zentra-order-service-redis-network:
+        ipv4_address: 192.48.0.16
+      zentra-order-service-network:
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    restart: on-failure
+
+  zentra-order-service-redisinsight:
+    container_name: zentra-order-service-redisinsight
+    image: redislabs/redisinsight:2.50
+    ports:
+      - 5543:5540
+    networks:
+      - zentra-order-service-redis-network
+
+volumes:
+  zentra-order-service-postgres-data:
+    name: zentra-order-service-postgres-data
+  zentra-order-service-redis-data-node-1:
+    name: zentra-order-service-redis-data-node-1
+  zentra-order-service-redis-data-node-2:
+    name: zentra-order-service-redis-data-node-2
+  zentra-order-service-redis-data-node-3:
+    name: zentra-order-service-redis-data-node-3
+  zentra-order-service-redis-data-node-4:
+    name: zentra-order-service-redis-data-node-4
+  zentra-order-service-redis-data-node-5:
+    name: zentra-order-service-redis-data-node-5
+  zentra-order-service-redis-data-node-6:
+    name: zentra-order-service-redis-data-node-6
+
+networks:
+  zentra-order-service-network:
+    name: zentra-order-service-network
+    driver: bridge
+  zentra-order-service-redis-network:
+    name: zentra-order-service-redis-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.48.0.0/16
+  zentra-network:
+    name: zentra-network
+    external: true
