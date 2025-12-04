@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/faujiahmat/zentra-order-service/src/common/log"
@@ -73,7 +74,8 @@ func setUpForNonDevelopment(appStatus string) *Config {
 	storeConf.Name = storeSecrets.Data["NAME"].(string)
 	storeConf.PhoneNumber = storeSecrets.Data["PHONE_NUMBER"].(string)
 	storeConf.Address = storeSecrets.Data["ADDRESS"].(string)
-	storeConf.AreaId = storeSecrets.Data["AREA_ID"].(int)
+	areaId, _ := strconv.Atoi(storeSecrets.Data["AREA_ID"].(string))
+	storeConf.AreaId = areaId
 	storeConf.Latitude = storeSecrets.Data["LATITUDE"].(string)
 	storeConf.Longitude = storeSecrets.Data["LONGITUDE"].(string)
 

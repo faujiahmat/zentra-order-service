@@ -147,6 +147,33 @@ services:
     networks:
       - zentra-order-service-redis-network
 
+  zentra-order-service:
+    image: zentra-order-service:latest
+    container_name: zentra-order-service
+    ports:
+      - "3800:3800"
+      - "4800:4800"
+    networks:
+      - zentra-network
+      - zentra-order-service-network
+      - zentra-order-service-redis-network
+    depends_on:
+      - zentra-order-service-postgres
+      - zentra-order-service-redis-node-1
+      - zentra-order-service-redis-node-2
+      - zentra-order-service-redis-node-3
+      - zentra-order-service-redis-node-4
+      - zentra-order-service-redis-node-5
+      - zentra-order-service-redis-node-6
+    environment:
+      - ZENTRA_APP_STATUS=PRODUCTION
+      - ZENTRA_CONFIG_ADDRESS=[vault_address]
+      - ZENTRA_CONFIG_TOKEN=[vault_token]
+    volumes:
+      - ./workspace:/app/workspace
+      - zentra-order-service-logs:/app
+    restart: on-failure
+
 volumes:
   zentra-order-service-postgres-data:
     name: zentra-order-service-postgres-data
@@ -162,6 +189,8 @@ volumes:
     name: zentra-order-service-redis-data-node-5
   zentra-order-service-redis-data-node-6:
     name: zentra-order-service-redis-data-node-6
+  zentra-order-service-logs:
+    name: zentra-order-service-logs
 
 networks:
   zentra-order-service-network:
